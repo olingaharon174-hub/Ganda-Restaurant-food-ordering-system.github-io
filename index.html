@@ -3,144 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ganda Restaurant - Food Ordering System</title>
+    <title>Admin Panel - Ganda Restaurant</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <link href="../style.css" rel="stylesheet">
+    <style>
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .admin-sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .admin-content {
+            margin-left: 250px;
+            flex: 1;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .sidebar-header {
+            padding: 1rem;
+            background: #1a252f;
+            text-align: center;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .content-header {
+            background: white;
+            padding: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-icon.primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .stats-icon.success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .stats-icon.warning {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .stats-icon.danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .recent-orders {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .order-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 70px;
+            }
+            
+            .admin-content {
+                margin-left: 70px;
+            }
+            
+            .sidebar-header span,
+            .sidebar-menu span {
+                display: none;
+            }
+            
+            .sidebar-menu a {
+                text-align: center;
+                padding: 1rem 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <i class="fas fa-utensils me-2"></i>Ganda Restaurant
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="menu.html">Menu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.html">
-                            <i class="fas fa-user me-2"></i>Login
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="cart.html">
-                            <i class="fas fa-shopping-cart"></i> Cart
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">0</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="admin/login.html">
-                            <i class="fas fa-user-shield me-2"></i>Admin
-                        </a>
-                    </li>
-                </ul>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-utensils fa-2x mb-2"></i>
+                <h5>Ganda Admin</h5>
             </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="index.html" class="active">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="orders.html">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="menu.html">
+                        <i class="fas fa-utensils me-2"></i>
+                        <span>Menu Items</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="categories.html">
+                        <i class="fas fa-list me-2"></i>
+                        <span>Categories</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="customers.html">
+                        <i class="fas fa-users me-2"></i>
+                        <span>Customers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="staff.html">
+                        <i class="fas fa-user-tie me-2"></i>
+                        <span>Staff</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reports.html">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html">
+                        <i class="fas fa-cog me-2"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../index.html">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
         </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container text-center text-white">
-            <h1 class="display-4 fw-bold mb-4">Welcome to Ganda Restaurant Nansana-Wakiso</h1>
-            <p class="lead mb-4">Delicious Ugandan cuisine delivered to your doorstep</p>
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="input-group">
-                        <input type="text" class="form-control form-control-lg" placeholder="Search for food..." id="search-input">
-                        <button class="btn btn-warning btn-lg" type="button" onclick="searchFood()">
-                            <i class="fas fa-search"></i> Search
-                        </button>
+        <!-- Main Content -->
+        <div class="admin-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2 class="mb-0">Dashboard</h2>
+                        <p class="text-muted mb-0">Welcome back, Admin!</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="text-muted">Last login: <span id="last-login"></span></span>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-4 mb-4">
-                    <div class="feature-card">
-                        <i class="fas fa-mobile-alt fa-3x text-warning mb-3"></i>
-                        <h4>Easy Ordering</h4>
-                        <p>Order from your phone or computer with just a few clicks</p>
+            <!-- Dashboard Content -->
+            <div class="p-4">
+                <!-- Statistics Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon primary">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3 id="total-orders">0</h3>
+                            <p class="text-muted mb-0">Total Orders</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 12% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon success">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <h3 id="total-revenue">UGX 0</h3>
+                            <p class="text-muted mb-0">Total Revenue</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 8% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon warning">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 id="total-customers">0</h3>
+                            <p class="text-muted mb-0">Total Customers</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 5% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon danger">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <h3 id="total-menu-items">0</h3>
+                            <p class="text-muted mb-0">Menu Items</p>
+                            <small class="text-muted">Active items</small>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-4">
-                    <div class="feature-card">
-                        <i class="fas fa-truck fa-3x text-warning mb-3"></i>
-                        <h4>Fast Delivery</h4>
-                        <p>Quick delivery to your location in Nansana and surrounding areas</p>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="feature-card">
-                        <i class="fas fa-credit-card fa-3x text-warning mb-3"></i>
-                        <h4>Secure Payment</h4>
-                        <p>Multiple payment options including mobile money and cards</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Popular Items Section -->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center mb-4">Popular Items</h2>
-            <div class="row" id="popular-items">
-                <!-- Items will be loaded here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>Ganda Restaurant</h5>
-                    <p>Serving delicious Ugandan cuisine since 2022</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Contact Info</h5>
-                    <p><i class="fas fa-map-marker-alt"></i> Ganda, Nansana-Wakiso</p>
-                    <p><i class="fas fa-phone"></i> +256 770802769</p>
-                    <p><i class="fas fa-envelope"></i> info@gandarestaurant.ug</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Follow Us</h5>
-                    <div class="social-links">
-                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                <!-- Recent Orders and Charts -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="recent-orders">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">Recent Orders</h4>
+                                <a href="orders.html" class="btn btn-sm btn-primary">View All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order #</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-orders-table">
+                                        <!-- Orders will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="recent-orders">
+                            <h4 class="mb-4">Quick Actions</h4>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" onclick="window.location.href='orders.html'">
+                                    <i class="fas fa-shopping-cart me-2"></i>View Orders
+                                </button>
+                                <button class="btn btn-success" onclick="window.location.href='menu.html'">
+                                    <i class="fas fa-plus me-2"></i>Add Menu Item
+                                </button>
+                                <button class="btn btn-info" onclick="window.location.href='reports.html'">
+                                    <i class="fas fa-chart-bar me-2"></i>View Reports
+                                </button>
+                                <button class="btn btn-warning" onclick="window.location.href='settings.html'">
+                                    <i class="fas fa-cog me-2"></i>Settings
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <hr class="my-4">
-            <div class="text-center">
-                <p>&copy; 2026 Ganda Restaurant. All rights reserved.</p>
-            </div>
         </div>
-    </footer>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // Load dashboard data
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+
+        // Load dashboard statistics
+        function loadDashboardData() {
+            // In a real application, this would fetch from a PHP backend
+            // For demo purposes, we'll use mock data
+            
+            // Mock statistics
+            document.getElementById('total-orders').textContent = '156';
+            document.getElementById('total-revenue').textContent = 'UGX 2,340,000';
+            document.getElementById('total-customers').textContent = '89';
+            document.getElementById('total-menu-items').textContent = '24';
+            
+            // Mock last login
+            document.getElementById('last-login').textContent = new Date().toLocaleString();
+            
+            // Mock recent orders
+            const recentOrders = [
+                {
+                    id: 'GR20260331001',
+                    customer: 'John Doe',
+                    amount: 28000,
+                    status: 'pending',
+                    date: '2026-03-31 10:30'
+                },
+                {
+                    id: 'GR20260331002',
+                    customer: 'Jane Smith',
+                    amount: 15000,
+                    status: 'confirmed',
+                    date: '2026-03-31 10:15'
+                },
+                {
+                    id: 'GR20260331003',
+                    customer: 'Bob Johnson',
+                    amount: 35000,
+                    status: 'preparing',
+                    date: '2026-03-31 09:45'
+                },
+                {
+                    id: 'GR20260331004',
+                    customer: 'Alice Brown',
+                    amount: 18000,
+                    status: 'delivered',
+                    date: '2026-03-31 09:30'
+                },
+                {
+                    id: 'GR20260331005',
+                    customer: 'Charlie Wilson',
+                    amount: 22000,
+                    status: 'delivering',
+                    date: '2026-03-31 09:15'
+                }
+            ];
+            
+            const ordersTable = document.getElementById('recent-orders-table');
+            ordersTable.innerHTML = recentOrders.map(order => `
+                <tr>
+                    <td>${order.id}</td>
+                    <td>${order.customer}</td>
+                    <td>UGX ${order.amount.toLocaleString()}</td>
+                    <td><span class="order-status status-${order.status}">${formatStatus(order.status)}</span></td>
+                    <td>${order.date}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="viewOrder('${order.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Format status for display
+        function formatStatus(status) {
+            const statuses = {
+                'pending': 'Pending',
+                'confirmed': 'Confirmed',
+                'preparing': 'Preparing',
+                'ready': 'Ready',
+                'delivering': 'Delivering',
+                'delivered': 'Delivered',
+                'cancelled': 'Cancelled'
+            };
+            return statuses[status] || status;
+        }
+
+        // View order details
+        function viewOrder(orderId) {
+            window.location.href = `orders.html?view=${orderId}`;
+        }
+    </script>
 </body>
 </html>
