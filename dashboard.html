@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Ganda Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.0.0/dist/chart.min.css" rel="stylesheet">
+    <link href="../style.css" rel="stylesheet">
+    <style>
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .admin-sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .admin-content {
+            margin-left: 250px;
+            flex: 1;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .sidebar-header {
+            padding: 1rem;
+            background: #1a252f;
+            text-align: center;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .content-header {
+            background: white;
+            padding: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stats-icon.primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .stats-icon.success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .stats-icon.warning {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .stats-icon.danger {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .recent-orders {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .order-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 2rem;
+        }
+        
+        .activity-feed {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            margin-right: 1rem;
+        }
+        
+        .activity-icon.order {
+            background: #3498db;
+            color: white;
+        }
+        
+        .activity-icon.customer {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .activity-icon.system {
+            background: #f39c12;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 70px;
+            }
+            
+            .admin-content {
+                margin-left: 70px;
+            }
+            
+            .sidebar-header span,
+            .sidebar-menu span {
+                display: none;
+            }
+            
+            .sidebar-menu a {
+                text-align: center;
+                padding: 1rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-utensils fa-2x mb-2"></i>
+                <h5>Ganda Admin</h5>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="dashboard.html" class="active">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="orders.html">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="menu.html">
+                        <i class="fas fa-utensils me-2"></i>
+                        <span>Menu Items</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="categories.html">
+                        <i class="fas fa-list me-2"></i>
+                        <span>Categories</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="customers.html">
+                        <i class="fas fa-users me-2"></i>
+                        <span>Customers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="staff.html">
+                        <i class="fas fa-user-tie me-2"></i>
+                        <span>Staff</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reports.html">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html">
+                        <i class="fas fa-cog me-2"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../index.html">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2 class="mb-0">Dashboard</h2>
+                        <p class="text-muted mb-0">Welcome back, <span class="admin-name">Admin</span>!</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="dropdown d-inline-block me-2">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-calendar me-2"></i>Last 7 Days
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Today</a></li>
+                                <li><a class="dropdown-item" href="#">Last 7 Days</a></li>
+                                <li><a class="dropdown-item" href="#">Last 30 Days</a></li>
+                                <li><a class="dropdown-item" href="#">Last 3 Months</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-primary" onclick="refreshDashboard()">
+                            <i class="fas fa-sync-alt me-2"></i>Refresh
+                        </button>
+                        <div class="dropdown d-inline-block ms-2">
+                            <button class="btn btn-outline-danger dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-2"></i>Admin
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="p-4">
+                <!-- Statistics Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon primary">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3 id="total-orders">156</h3>
+                            <p class="text-muted mb-0">Total Orders</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 12% from last week</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon success">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <h3 id="total-revenue">UGX 2,340,000</h3>
+                            <p class="text-muted mb-0">Total Revenue</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 8% from last week</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon warning">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 id="total-customers">89</h3>
+                            <p class="text-muted mb-0">Total Customers</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 5% from last week</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="stats-icon danger">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <h3 id="total-menu-items">24</h3>
+                            <p class="text-muted mb-0">Menu Items</p>
+                            <small class="text-muted">Active items</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Recent Activity -->
+                <div class="row">
+                    <!-- Revenue Chart -->
+                    <div class="col-md-8">
+                        <div class="recent-orders">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">Revenue Overview</h4>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-primary active" onclick="updateChart('daily')">Daily</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="updateChart('weekly')">Weekly</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="updateChart('monthly')">Monthly</button>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="col-md-4">
+                        <div class="recent-orders">
+                            <h4 class="mb-4">Recent Activity</h4>
+                            <div class="activity-feed" id="activity-feed">
+                                <!-- Activity items will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders and Popular Items -->
+                <div class="row mt-4">
+                    <!-- Recent Orders -->
+                    <div class="col-md-8">
+                        <div class="recent-orders">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">Recent Orders</h4>
+                                <a href="orders.html" class="btn btn-sm btn-primary">View All</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order #</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-orders-table">
+                                        <!-- Orders will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Popular Items -->
+                    <div class="col-md-4">
+                        <div class="recent-orders">
+                            <h4 class="mb-4">Popular Items</h4>
+                            <div id="popular-items">
+                                <!-- Popular items will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Pending Orders</h5>
+                                <h2 class="text-warning" id="pending-orders">8</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Preparing</h5>
+                                <h2 class="text-info" id="preparing-orders">5</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Out for Delivery</h5>
+                                <h2 class="text-primary" id="delivery-orders">3</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Completed Today</h5>
+                                <h2 class="text-success" id="completed-orders">24</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.0/dist/chart.umd.min.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        let revenueChart;
+
+        // Load dashboard data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if admin is logged in
+            const adminUser = localStorage.getItem('adminUser');
+            if (!adminUser) {
+                // Not logged in, redirect to login
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Parse and set current admin
+            currentAdmin = JSON.parse(adminUser);
+            updateAdminInterface();
+            
+            loadDashboardData();
+            initializeChart();
+            loadRecentActivity();
+            loadRecentOrders();
+            loadPopularItems();
+        });
+
+        // Initialize revenue chart
+        function initializeChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Revenue (UGX)',
+                        data: [320000, 380000, 350000, 420000, 480000, 520000, 450000],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'UGX ' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load dashboard statistics
+        function loadDashboardData() {
+            // In a real application, this would fetch from a PHP backend
+            // For demo purposes, we'll use mock data
+            document.getElementById('total-orders').textContent = '156';
+            document.getElementById('total-revenue').textContent = 'UGX 2,340,000';
+            document.getElementById('total-customers').textContent = '89';
+            document.getElementById('total-menu-items').textContent = '24';
+            
+            // Order status counts
+            document.getElementById('pending-orders').textContent = '8';
+            document.getElementById('preparing-orders').textContent = '5';
+            document.getElementById('delivery-orders').textContent = '3';
+            document.getElementById('completed-orders').textContent = '24';
+        }
+
+        // Load recent activity
+        function loadRecentActivity() {
+            const activities = [
+                { type: 'order', message: 'New order #GR20260331001 from John Doe', time: '2 minutes ago' },
+                { type: 'customer', message: 'New customer registration: Jane Smith', time: '15 minutes ago' },
+                { type: 'order', message: 'Order #GR202603310008 marked as delivered', time: '1 hour ago' },
+                { type: 'system', message: 'Menu item "Chicken Luwombo" updated', time: '2 hours ago' },
+                { type: 'order', message: 'Order #GR202603310007 confirmed', time: '3 hours ago' },
+                { type: 'customer', message: 'Customer Bob Johnson placed review', time: '4 hours ago' }
+            ];
+
+            const activityFeed = document.getElementById('activity-feed');
+            activityFeed.innerHTML = activities.map(activity => `
+                <div class="activity-item d-flex align-items-center">
+                    <div class="activity-icon ${activity.type}">
+                        <i class="fas fa-${getActivityIcon(activity.type)}"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <p class="mb-0">${activity.message}</p>
+                        <small class="text-muted">${activity.time}</small>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get activity icon
+        function getActivityIcon(type) {
+            const icons = {
+                'order': 'shopping-cart',
+                'customer': 'user',
+                'system': 'cog'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        // Load recent orders
+        function loadRecentOrders() {
+            const recentOrders = [
+                {
+                    id: 'GR20260331001',
+                    customer: 'John Doe',
+                    amount: 28000,
+                    status: 'pending',
+                    date: '2026-03-31 10:30'
+                },
+                {
+                    id: 'GR20260331002',
+                    customer: 'Jane Smith',
+                    amount: 15000,
+                    status: 'confirmed',
+                    date: '2026-03-31 10:15'
+                },
+                {
+                    id: 'GR20260331003',
+                    customer: 'Bob Johnson',
+                    amount: 35000,
+                    status: 'preparing',
+                    date: '2026-03-31 09:45'
+                },
+                {
+                    id: 'GR20260331004',
+                    customer: 'Alice Brown',
+                    amount: 18000,
+                    status: 'delivered',
+                    date: '2026-03-31 09:30'
+                },
+                {
+                    id: 'GR20260331005',
+                    customer: 'Charlie Wilson',
+                    amount: 22000,
+                    status: 'delivering',
+                    date: '2026-03-31 09:15'
+                }
+            ];
+            
+            const ordersTable = document.getElementById('recent-orders-table');
+            ordersTable.innerHTML = recentOrders.map(order => `
+                <tr>
+                    <td><strong>${order.id}</strong></td>
+                    <td>${order.customer}</td>
+                    <td>UGX ${order.amount.toLocaleString()}</td>
+                    <td><span class="order-status status-${order.status}">${formatStatus(order.status)}</span></td>
+                    <td>${order.date}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="viewOrder('${order.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Load popular items
+        function loadPopularItems() {
+            const popularItems = [
+                { name: 'Chicken Luwombo', orders: 45, revenue: 810000 },
+                { name: 'Ugandan Rolex', orders: 38, revenue: 304000 },
+                { name: 'Matooke with Beef', orders: 32, revenue: 480000 },
+                { name: 'Posho and Beans', orders: 28, revenue: 196000 },
+                { name: 'Fresh Fruit Juice', orders: 25, revenue: 75000 }
+            ];
+
+            const popularItemsContainer = document.getElementById('popular-items');
+            popularItemsContainer.innerHTML = popularItems.map((item, index) => `
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h6 class="mb-0">${item.name}</h6>
+                        <small class="text-muted">${item.orders} orders</small>
+                    </div>
+                    <div class="text-end">
+                        <strong>UGX ${item.revenue.toLocaleString()}</strong>
+                    </div>
+                </div>
+                ${index < popularItems.length - 1 ? '<hr>' : ''}
+            `).join('');
+        }
+
+        // Format status for display
+        function formatStatus(status) {
+            const statuses = {
+                'pending': 'Pending',
+                'confirmed': 'Confirmed',
+                'preparing': 'Preparing',
+                'ready': 'Ready',
+                'delivering': 'Delivering',
+                'delivered': 'Delivered',
+                'cancelled': 'Cancelled'
+            };
+            return statuses[status] || status;
+        }
+
+        // View order details
+        function viewOrder(orderId) {
+            window.location.href = `orders.html?view=${orderId}`;
+        }
+
+        // Update chart based on period
+        function updateChart(period) {
+            // Update active button
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update chart data based on period
+            let labels, data;
+            
+            switch(period) {
+                case 'daily':
+                    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    data = [320000, 380000, 350000, 420000, 480000, 520000, 450000];
+                    break;
+                case 'weekly':
+                    labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    data = [2100000, 2450000, 2800000, 2650000];
+                    break;
+                case 'monthly':
+                    labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+                    data = [8500000, 9200000, 9800000, 10500000, 11200000, 10800000];
+                    break;
+            }
+
+            revenueChart.data.labels = labels;
+            revenueChart.data.datasets[0].data = data;
+            revenueChart.update();
+        }
+
+        // Refresh dashboard
+        function refreshDashboard() {
+            // Show loading state
+            const refreshBtn = event.target;
+            const originalContent = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
+            refreshBtn.disabled = true;
+
+            // Simulate data refresh
+            setTimeout(() => {
+                loadDashboardData();
+                loadRecentActivity();
+                loadRecentOrders();
+                loadPopularItems();
+                
+                // Restore button
+                refreshBtn.innerHTML = originalContent;
+                refreshBtn.disabled = false;
+                
+                // Show success message
+                showAdminToast('Dashboard refreshed successfully!', 'success');
+            }, 1500);
+        }
+
+        // Update admin interface based on login status
+        function updateAdminInterface() {
+            if (!currentAdmin) return;
+
+            // Update admin name in dashboard
+            const adminNameElements = document.querySelectorAll('.admin-name');
+            adminNameElements.forEach(element => {
+                element.textContent = `${currentAdmin.firstName} ${currentAdmin.lastName}`;
+            });
+
+            // Update admin email
+            const adminEmailElements = document.querySelectorAll('.admin-email');
+            adminEmailElements.forEach(element => {
+                element.textContent = currentAdmin.email;
+            });
+
+            // Update last login time
+            const lastLoginElements = document.querySelectorAll('.last-login');
+            lastLoginElements.forEach(element => {
+                if (currentAdmin.loginTime) {
+                    const loginTime = new Date(currentAdmin.loginTime);
+                    element.textContent = loginTime.toLocaleString();
+                }
+            });
+        }
+
+        // Logout function
+        function adminLogout() {
+            localStorage.removeItem('adminUser');
+            localStorage.removeItem('adminRememberMe');
+            currentAdmin = null;
+            
+            showAdminToast('You have been logged out successfully', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1000);
+        }
+
+        // Show admin toast notification
+        function showAdminToast(message, type = 'success') {
+            const toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container';
+            toastContainer.style.position = 'fixed';
+            toastContainer.style.top = '20px';
+            toastContainer.style.right = '20px';
+            toastContainer.style.zIndex = '9999';
+            
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type} fade-in`;
+            toast.style.minWidth = '300px';
+            
+            if (type === 'error') {
+                toast.style.borderLeft = '4px solid #dc3545';
+            } else if (type === 'warning') {
+                toast.style.borderLeft = '4px solid #ffc107';
+            } else {
+                toast.style.borderLeft = '4px solid #28a745';
+            }
+            
+            toast.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center p-3">
+                    <div>
+                        <strong>${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+                        <div>${message}</div>
+                    </div>
+                    <button type="button" class="btn-close ms-2" onclick="this.parentElement.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            document.body.appendChild(toastContainer);
+
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                toastContainer.remove();
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

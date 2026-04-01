@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Ganda Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.0.0/dist/chart.min.css" rel="stylesheet">
+    <link href="../style.css" rel="stylesheet">
+    <style>
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .admin-sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        
+        .admin-content {
+            margin-left: 250px;
+            flex: 1;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .sidebar-header {
+            padding: 1rem;
+            background: #1a252f;
+            text-align: center;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .content-header {
+            background: white;
+            padding: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 2rem;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-utensils fa-2x mb-2"></i>
+                <h5>Ganda Admin</h5>
+            </div>
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="dashboard.html">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="orders.html">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="menu.html">
+                        <i class="fas fa-utensils me-2"></i>
+                        <span>Menu Items</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="categories.html">
+                        <i class="fas fa-list me-2"></i>
+                        <span>Categories</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="customers.html">
+                        <i class="fas fa-users me-2"></i>
+                        <span>Customers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="staff.html">
+                        <i class="fas fa-user-tie me-2"></i>
+                        <span>Staff</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reports.html" class="active">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html">
+                        <i class="fas fa-cog me-2"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../index.html">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-content">
+            <!-- Header -->
+            <div class="content-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h2 class="mb-0">Reports & Analytics</h2>
+                        <p class="text-muted mb-0">Business insights and performance metrics</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="dropdown d-inline-block me-2">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-calendar me-2"></i>Last 30 Days
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="updateReportPeriod('today')">Today</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateReportPeriod('7days')">Last 7 Days</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateReportPeriod('30days')">Last 30 Days</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateReportPeriod('3months')">Last 3 Months</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="updateReportPeriod('year')">Last Year</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-primary" onclick="exportReports()">
+                            <i class="fas fa-download me-2"></i>Export Reports
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Content -->
+            <div class="p-4">
+                <!-- Revenue Overview -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="stats-card text-center">
+                            <h4 class="text-primary">UGX 8,450,000</h4>
+                            <p class="text-muted mb-0">Total Revenue</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 12% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card text-center">
+                            <h4 class="text-success">1,234</h4>
+                            <p class="text-muted mb-0">Total Orders</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 8% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card text-center">
+                            <h4 class="text-warning">456</h4>
+                            <p class="text-muted mb-0">Total Customers</p>
+                            <small class="text-success"><i class="fas fa-arrow-up"></i> 15% from last month</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card text-center">
+                            <h4 class="text-info">UGX 6,845</h4>
+                            <p class="text-muted mb-0">Average Order Value</p>
+                            <small class="text-danger"><i class="fas fa-arrow-down"></i> 3% from last month</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="report-card">
+                            <h5 class="mb-4">Revenue Trend</h5>
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="report-card">
+                            <h5 class="mb-4">Order Status Distribution</h5>
+                            <div class="chart-container">
+                                <canvas id="orderStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Items -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="report-card">
+                            <h5 class="mb-4">Top Selling Items</h5>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Orders</th>
+                                            <th>Revenue</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="top-items-table">
+                                        <!-- Top items will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="report-card">
+                            <h5 class="mb-4">Customer Analytics</h5>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Metric</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>New Customers</td>
+                                            <td><strong>67</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Returning Customers</td>
+                                            <td><strong>389</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Average Orders/Customer</td>
+                                            <td><strong>3.2</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Customer Retention Rate</td>
+                                            <td><strong>85%</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hourly Sales -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="report-card">
+                            <h5 class="mb-4">Hourly Sales Distribution</h5>
+                            <div class="chart-container">
+                                <canvas id="hourlySalesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.0/dist/chart.umd.min.js"></script>
+    <script>
+        let revenueChart, orderStatusChart, hourlySalesChart;
+
+        // Load reports on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if admin is logged in
+            const adminUser = localStorage.getItem('adminUser');
+            if (!adminUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            initializeCharts();
+            loadTopItems();
+        });
+
+        // Initialize charts
+        function initializeCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Revenue (UGX)',
+                        data: [2100000, 2450000, 2800000, 2650000],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'UGX ' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Order Status Chart
+            const orderStatusCtx = document.getElementById('orderStatusChart').getContext('2d');
+            orderStatusChart = new Chart(orderStatusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Delivered', 'Preparing', 'Confirmed', 'Pending'],
+                    datasets: [{
+                        data: [856, 234, 123, 21],
+                        backgroundColor: [
+                            '#28a745',
+                            '#ffc107',
+                            '#17a2b8',
+                            '#dc3545'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Hourly Sales Chart
+            const hourlySalesCtx = document.getElementById('hourlySalesChart').getContext('2d');
+            hourlySalesChart = new Chart(hourlySalesCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['8AM', '9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM'],
+                    datasets: [{
+                        label: 'Orders',
+                        data: [12, 25, 45, 67, 89, 123, 98, 87, 76, 65, 54, 32],
+                        backgroundColor: '#28a745'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load top selling items
+        function loadTopItems() {
+            const topItems = [
+                { name: 'Chicken Luwombo', orders: 156, revenue: 2808000 },
+                { name: 'Matooke with Beef', orders: 134, revenue: 2010000 },
+                { name: 'Ugandan Rolex', orders: 128, revenue: 1024000 },
+                { name: 'Fresh Fruit Juice', orders: 98, revenue: 294000 },
+                { name: 'Mandazi', orders: 87, revenue: 174000 }
+            ];
+
+            const tableBody = document.getElementById('top-items-table');
+            tableBody.innerHTML = topItems.map((item, index) => `
+                <tr>
+                    <td>${index + 1}. ${item.name}</td>
+                    <td>${item.orders}</td>
+                    <td>UGX ${item.revenue.toLocaleString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Update report period
+        function updateReportPeriod(period) {
+            showAdminToast(`Report period updated to ${period}`, 'success');
+            // In a real application, this would reload data for the selected period
+            initializeCharts();
+            loadTopItems();
+        }
+
+        // Export reports
+        function exportReports() {
+            showAdminToast('Reports export functionality would be implemented here', 'warning');
+        }
+
+        // Show admin toast notification
+        function showAdminToast(message, type = 'success') {
+            const toastContainer = document.createElement('div');
+            toastContainer.className = 'toast-container';
+            toastContainer.style.position = 'fixed';
+            toastContainer.style.top = '20px';
+            toastContainer.style.right = '20px';
+            toastContainer.style.zIndex = '9999';
+            
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type} fade-in`;
+            toast.style.minWidth = '300px';
+            
+            if (type === 'error') {
+                toast.style.borderLeft = '4px solid #dc3545';
+            } else if (type === 'warning') {
+                toast.style.borderLeft = '4px solid #ffc107';
+            } else {
+                toast.style.borderLeft = '4px solid #28a745';
+            }
+            
+            toast.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center p-3">
+                    <div>
+                        <strong>${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+                        <div>${message}</div>
+                    </div>
+                    <button type="button" class="btn-close ms-2" onclick="this.parentElement.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            document.body.appendChild(toastContainer);
+
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                toastContainer.remove();
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

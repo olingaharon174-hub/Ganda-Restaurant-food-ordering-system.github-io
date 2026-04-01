@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ganda Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 1rem;
+        }
+        
+        .auth-left {
+            background: #28a745;
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .auth-right {
+            padding: 3rem;
+        }
+        
+        .auth-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn-auth {
+            padding: 0.75rem;
+            font-weight: 500;
+            border-radius: 8px;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #dee2e6;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+            color: #6c757d;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-btn:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-left {
+                display: none;
+            }
+            
+            .auth-right {
+                padding: 2rem;
+            }
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .auth-feature {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="row g-0">
+                <!-- Left Side - Features -->
+                <div class="col-md-5">
+                    <div class="auth-left">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-utensils fa-3x mb-3"></i>
+                            <h2>Ganda Restaurant</h2>
+                            <p class="mb-0">Your favorite Ugandan cuisine, delivered fresh!</p>
+                        </div>
+                        
+                        <div class="auth-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h5>Fast Ordering</h5>
+                            <p>Order your favorite meals in seconds with our streamlined system</p>
+                        </div>
+                        
+                        <div class="auth-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <h5>Quick Delivery</h5>
+                            <p>Get your food delivered hot and fresh to your doorstep</p>
+                        </div>
+                        
+                        <div class="auth-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h5>Authentic Taste</h5>
+                            <p>Experience the true flavors of Ugandan cuisine</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Side - Login Form -->
+                <div class="col-md-7">
+                    <div class="auth-right">
+                        <div class="auth-form">
+                            <!-- Login/Register Toggle -->
+                            <div class="text-center mb-4">
+                                <ul class="nav nav-pills nav-fill" id="authTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="login-tab" data-bs-toggle="pill" data-bs-target="#login" type="button" role="tab">
+                                            Login
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="register-tab" data-bs-toggle="pill" data-bs-target="#register" type="button" role="tab">
+                                            Register
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Tab Content -->
+                            <div class="tab-content" id="authTabContent">
+                                <!-- Login Tab -->
+                                <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                    <h4 class="mb-4">Welcome Back!</h4>
+                                    <form id="login-form">
+                                        <div class="form-floating mb-3">
+                                            <input type="email" class="form-control" id="login-email" placeholder="name@example.com" required>
+                                            <label for="login-email">Email address</label>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3 position-relative">
+                                            <input type="password" class="form-control" id="login-password" placeholder="Password" required>
+                                            <label for="login-password">Password</label>
+                                            <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="remember-me">
+                                                <label class="form-check-label" for="remember-me">
+                                                    Remember me
+                                                </label>
+                                            </div>
+                                            <a href="#" class="text-decoration-none">Forgot password?</a>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-success btn-auth w-100 mb-3">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                                        </button>
+                                    </form>
+                                    
+                                    <div class="divider">
+                                        <span>OR</span>
+                                    </div>
+                                    
+                                    <div class="social-login">
+                                        <a href="#" class="social-btn">
+                                            <i class="fab fa-google me-2"></i>Google
+                                        </a>
+                                        <a href="#" class="social-btn">
+                                            <i class="fab fa-facebook me-2"></i>Facebook
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <!-- Register Tab -->
+                                <div class="tab-pane fade" id="register" role="tabpanel">
+                                    <h4 class="mb-4">Create Account</h4>
+                                    <form id="register-form">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="first-name" placeholder="First name" required>
+                                                    <label for="first-name">First name</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" id="last-name" placeholder="Last name" required>
+                                                    <label for="last-name">Last name</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3">
+                                            <input type="email" class="form-control" id="register-email" placeholder="name@example.com" required>
+                                            <label for="register-email">Email address</label>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3 position-relative">
+                                            <input type="password" class="form-control" id="register-password" placeholder="Password" required>
+                                            <label for="register-password">Password</label>
+                                            <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3 position-relative">
+                                            <input type="password" class="form-control" id="confirm-password" placeholder="Confirm password" required>
+                                            <label for="confirm-password">Confirm password</label>
+                                            <button type="button" class="password-toggle" onclick="togglePassword('confirm-password')">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3">
+                                            <input type="tel" class="form-control" id="phone" placeholder="+256 7XX XXX XXX">
+                                            <label for="phone">Phone number</label>
+                                        </div>
+                                        
+                                        <div class="form-floating mb-3">
+                                            <textarea class="form-control" id="address" placeholder="Delivery address" style="height: 80px;"></textarea>
+                                            <label for="address">Delivery address (optional)</label>
+                                        </div>
+                                        
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="terms" required>
+                                            <label class="form-check-label" for="terms">
+                                                I agree to the <a href="#" class="text-decoration-none">Terms and Conditions</a>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="checkbox" id="newsletter">
+                                            <label class="form-check-label" for="newsletter">
+                                                Send me updates about special offers and new menu items
+                                            </label>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-success btn-auth w-100 mb-3">
+                                            <i class="fas fa-user-plus me-2"></i>Create Account
+                                        </button>
+                                    </form>
+                                    
+                                    <div class="divider">
+                                        <span>OR</span>
+                                    </div>
+                                    
+                                    <div class="social-login">
+                                        <a href="#" class="social-btn">
+                                            <i class="fab fa-google me-2"></i>Google
+                                        </a>
+                                        <a href="#" class="social-btn">
+                                            <i class="fab fa-facebook me-2"></i>Facebook
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <a href="index.html" class="text-decoration-none">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Handle login form submission
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+            
+            // In a real application, this would authenticate with a PHP backend
+            console.log('Login attempt:', { email, password, rememberMe });
+            
+            // Simulate successful login
+            const currentUser = {
+                id: 1,
+                firstName: 'John',
+                lastName: 'Doe',
+                email: email,
+                phone: '+256 770802769',
+                address: 'Ganda, Nansana-Wakiso'
+            };
+            
+            // Save user session
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            if (rememberMe) {
+                localStorage.setItem('rememberMe', 'true');
+            }
+            
+            // Show success message
+            showToast('Login successful! Welcome back to Ganda Restaurant.', 'success');
+            
+            // Redirect to home page
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+        
+        // Handle registration form submission
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('first-name').value;
+            const lastName = document.getElementById('last-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const terms = document.getElementById('terms').checked;
+            const newsletter = document.getElementById('newsletter').checked;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match!', 'error');
+                return;
+            }
+            
+            // Validate terms acceptance
+            if (!terms) {
+                showToast('Please accept the terms and conditions', 'error');
+                return;
+            }
+            
+            // In a real application, this would register with a PHP backend
+            const newUser = {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                address: address,
+                newsletter: newsletter,
+                registeredAt: new Date().toISOString()
+            };
+            
+            console.log('Registration attempt:', newUser);
+            
+            // Simulate successful registration
+            showToast('Registration successful! Welcome to Ganda Restaurant.', 'success');
+            
+            // Auto-login after registration
+            const currentUser = {
+                id: Date.now(),
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                address: address
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Redirect to home page
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+        
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = event.target;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        // Check for remembered user on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const rememberMe = localStorage.getItem('rememberMe');
+            if (rememberMe === 'true') {
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                if (currentUser) {
+                    document.getElementById('login-email').value = currentUser.email;
+                    document.getElementById('remember-me').checked = true;
+                }
+            }
+        });
+        
+        // Handle social login (placeholder)
+        document.querySelectorAll('.social-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showToast('Social login coming soon!', 'warning');
+            });
+        });
+        
+        // Handle forgot password (placeholder)
+        document.querySelector('a[href="#"]').addEventListener('click', function(e) {
+            if (this.textContent.includes('Forgot password')) {
+                e.preventDefault();
+                showToast('Password reset functionality coming soon!', 'warning');
+            }
+        });
+    </script>
+</body>
+</html>

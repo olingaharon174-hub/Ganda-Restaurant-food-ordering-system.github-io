@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Ganda Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-utensils me-2"></i>Ganda Restaurant
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <i class="fas fa-user me-2"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="cart.html">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin/login.html">
+                            <i class="fas fa-user-shield me-2"></i>Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Confirmation Header -->
+    <section class="py-5 bg-light">
+        <div class="container text-center">
+            <div class="success-icon mb-4">
+                <i class="fas fa-check-circle fa-5x text-success"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-4">Order Confirmed!</h1>
+            <p class="lead mb-4">Thank you for your order. We'll prepare it with care!</p>
+        </div>
+    </section>
+
+    <!-- Order Details -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Order Information -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h4 class="mb-0"><i class="fas fa-receipt me-2"></i>Order Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Order Number:</strong> <span id="order-number">GR20260331001</span></p>
+                                    <p><strong>Order Date:</strong> <span id="order-date"></span></p>
+                                    <p><strong>Order Type:</strong> <span id="order-type"></span></p>
+                                    <p><strong>Payment Method:</strong> <span id="payment-method"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Customer Name:</strong> <span id="customer-name"></span></p>
+                                    <p><strong>Phone:</strong> <span id="customer-phone"></span></p>
+                                    <p><strong>Email:</strong> <span id="customer-email"></span></p>
+                                    <p><strong>Delivery Address:</strong> <span id="customer-address"></span></p>
+                                </div>
+                            </div>
+                            <div id="special-instructions-container" style="display: none;">
+                                <p><strong>Special Instructions:</strong> <span id="special-instructions"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h4 class="mb-0"><i class="fas fa-shopping-bag me-2"></i>Order Items</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="order-items">
+                                <!-- Order items will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h4 class="mb-0"><i class="fas fa-clock me-2"></i>Order Timeline</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="timeline">
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Order Placed</h6>
+                                        <p class="text-muted small mb-0">Your order has been received</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Order Confirmed</h6>
+                                        <p class="text-muted small mb-0">Restaurant is confirming your order</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Preparing</h6>
+                                        <p class="text-muted small mb-0">Your food is being prepared</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Out for Delivery</h6>
+                                        <p class="text-muted small mb-0">Your order is on the way</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Delivered</h6>
+                                        <p class="text-muted small mb-0">Enjoy your meal!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Order Summary -->
+                    <div class="order-summary">
+                        <h4 class="mb-4">Order Summary</h4>
+                        
+                        <div id="summary-items">
+                            <!-- Summary items will be displayed here -->
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">UGX 0</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Delivery Fee:</span>
+                            <span id="delivery-fee">UGX 0</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tax (18%):</span>
+                            <span id="tax">UGX 0</span>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5>Total:</h5>
+                            <h5 id="total">UGX 0</h5>
+                        </div>
+
+                        <div class="alert alert-success">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Estimated Delivery:</strong> 30-45 minutes
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" onclick="window.print()">
+                                <i class="fas fa-print me-2"></i>Print Receipt
+                            </button>
+                            <a href="index.html" class="btn btn-outline-secondary">
+                                <i class="fas fa-home me-2"></i>Back to Home
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h6 class="card-title"><i class="fas fa-phone me-2"></i>Need Help?</h6>
+                            <p class="small mb-2">
+                                <strong>Phone:</strong> +256 123 456 789<br>
+                                <strong>Email:</strong> info@gandarestaurant.ug
+                            </p>
+                            <p class="small text-muted mb-0">
+                                If you have any questions about your order, please don't hesitate to contact us.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Ganda Restaurant</h5>
+                    <p>Serving delicious Ugandan cuisine since 2022</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Info</h5>
+                    <p><i class="fas fa-map-marker-alt"></i> Ganda, Nansana-Wakiso</p>
+                    <p><i class="fas fa-phone"></i> +256 123 456 789</p>
+                    <p><i class="fas fa-envelope"></i> info@gandarestaurant.ug</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2026 Ganda Restaurant. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <style>
+        .success-icon {
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -25px;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .timeline-item.completed .timeline-marker {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .timeline-content h6 {
+            margin-bottom: 5px;
+        }
+
+        @media print {
+            .navbar, footer, .btn {
+                display: none !important;
+            }
+        }
+    </style>
+    <script>
+        // Load order confirmation page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderConfirmation();
+            updateCartCount();
+        });
+
+        // Load order confirmation details
+        function loadOrderConfirmation() {
+            const orderData = JSON.parse(localStorage.getItem('lastOrder'));
+            
+            if (!orderData) {
+                // If no order data, redirect to home
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Generate order number
+            const orderNumber = 'GR' + new Date().toISOString().slice(0,10).replace(/-/g, '') + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            
+            // Update order information
+            document.getElementById('order-number').textContent = orderNumber;
+            document.getElementById('order-date').textContent = new Date(orderData.orderDate).toLocaleString();
+            document.getElementById('order-type').textContent = orderData.orderType === 'delivery' ? 'Home Delivery' : 'Pickup';
+            document.getElementById('payment-method').textContent = formatPaymentMethod(orderData.paymentMethod);
+            
+            // Update customer information
+            document.getElementById('customer-name').textContent = orderData.customer.name;
+            document.getElementById('customer-phone').textContent = orderData.customer.phone;
+            document.getElementById('customer-email').textContent = orderData.customer.email;
+            document.getElementById('customer-address').textContent = orderData.customer.address;
+            
+            // Update special instructions if present
+            if (orderData.specialInstructions) {
+                document.getElementById('special-instructions').textContent = orderData.specialInstructions;
+                document.getElementById('special-instructions-container').style.display = 'block';
+            }
+            
+            // Update order items
+            const orderItemsContainer = document.getElementById('order-items');
+            orderItemsContainer.innerHTML = orderData.items.map(item => `
+                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                    <div>
+                        <strong>${item.name}</strong>
+                        <span class="text-muted">x${item.quantity}</span>
+                    </div>
+                    <span>UGX ${(item.price * item.quantity).toLocaleString()}</span>
+                </div>
+            `).join('');
+            
+            // Update summary items
+            const summaryItemsContainer = document.getElementById('summary-items');
+            summaryItemsContainer.innerHTML = orderData.items.map(item => `
+                <div class="d-flex justify-content-between mb-2">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>UGX ${(item.price * item.quantity).toLocaleString()}</span>
+                </div>
+            `).join('');
+            
+            // Update totals
+            document.getElementById('subtotal').textContent = `UGX ${orderData.subtotal.toLocaleString()}`;
+            document.getElementById('delivery-fee').textContent = `UGX ${orderData.deliveryFee.toLocaleString()}`;
+            document.getElementById('tax').textContent = `UGX ${orderData.tax.toLocaleString()}`;
+            document.getElementById('total').textContent = `UGX ${orderData.total.toLocaleString()}`;
+            
+            // Clear the order data from localStorage
+            localStorage.removeItem('lastOrder');
+        }
+
+        // Format payment method for display
+        function formatPaymentMethod(method) {
+            const methods = {
+                'cash': 'Cash on Delivery',
+                'mobile_money': 'Mobile Money',
+                'card': 'Credit/Debit Card'
+            };
+            return methods[method] || method;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Ganda Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-utensils me-2"></i>Ganda Restaurant
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">
+                            <i class="fas fa-user me-2"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="cart.html">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin/login.html">
+                            <i class="fas fa-user-shield me-2"></i>Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Header -->
+    <section class="py-5 bg-light">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">Our Menu</h1>
+            <p class="lead mb-4">Discover our delicious Ugandan cuisine</p>
+            
+            <!-- Category Filter -->
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-success active" onclick="filterByCategory('all')">All Items</button>
+                        <button type="button" class="btn btn-outline-success" onclick="filterByCategory('Main Course')">Main Course</button>
+                        <button type="button" class="btn btn-outline-success" onclick="filterByCategory('Appetizers')">Appetizers</button>
+                        <button type="button" class="btn btn-outline-success" onclick="filterByCategory('Beverages')">Beverages</button>
+                        <button type="button" class="btn btn-outline-success" onclick="filterByCategory('Desserts')">Desserts</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Items -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row" id="menu-items">
+                <!-- Menu items will be loaded here -->
+            </div>
+            
+            <!-- Loading Spinner -->
+            <div class="spinner" id="loading-spinner">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Ganda Restaurant</h5>
+                    <p>Serving delicious Ugandan cuisine since 2022</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Info</h5>
+                    <p><i class="fas fa-map-marker-alt"></i> Ganda, Nansana-Wakiso</p>
+                    <p><i class="fas fa-phone"></i> +256 123 456 789</p>
+                    <p><i class="fas fa-envelope"></i> info@gandarestaurant.ug</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2026 Ganda Restaurant. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Load menu items on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMenuItemsToPage();
+            loadCartFromLocalStorage();
+            updateCartCount();
+        });
+
+        // Load menu items to the page
+        function loadMenuItemsToPage() {
+            const menuContainer = document.getElementById('menu-items');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+            menuContainer.innerHTML = '';
+
+            // Check for search results
+            const searchResults = localStorage.getItem('searchResults');
+            let itemsToDisplay = menuItems;
+
+            if (searchResults) {
+                itemsToDisplay = JSON.parse(searchResults);
+                localStorage.removeItem('searchResults');
+            }
+
+            // Group items by category
+            const groupedItems = {};
+            itemsToDisplay.forEach(item => {
+                if (!groupedItems[item.category]) {
+                    groupedItems[item.category] = [];
+                }
+                groupedItems[item.category].push(item);
+            });
+
+            // Display items by category
+            let html = '';
+            for (const [category, items] of Object.entries(groupedItems)) {
+                html += `
+                    <div class="col-12 menu-category" data-category="${category}">
+                        <h3 class="category-title">${category}</h3>
+                        <div class="row">
+                `;
+
+                items.forEach(item => {
+                    html += `
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="food-item">
+                                <img src="${item.image}" alt="${item.name}">
+                                <div class="food-item-body">
+                                    <h5>${item.name}</h5>
+                                    <p class="text-muted">${item.description}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="food-price">UGX ${item.price.toLocaleString()}</span>
+                                        <button class="btn btn-primary btn-sm" onclick="addToCart(${item.id})">
+                                            <i class="fas fa-cart-plus"></i> Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+
+            menuContainer.innerHTML = html;
+            loadingSpinner.style.display = 'none';
+        }
+
+        // Filter by category
+        function filterByCategory(category) {
+            // Update active button
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide categories
+            const menuCategories = document.querySelectorAll('.menu-category');
+            menuCategories.forEach(catElement => {
+                if (category === 'all' || catElement.dataset.category === category) {
+                    catElement.style.display = 'block';
+                } else {
+                    catElement.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
